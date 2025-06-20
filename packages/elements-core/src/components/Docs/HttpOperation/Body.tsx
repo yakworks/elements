@@ -71,6 +71,7 @@ export const Body = ({ body, onChange, isHttpWebhookOperation = false }: BodyPro
           renderRootTreeLines
           nodeHasChanged={nodeHasChanged}
           renderExtensionAddon={renderExtensionAddon}
+          defaultExpandedDepth={0}
         />
       )}
     </VStack>

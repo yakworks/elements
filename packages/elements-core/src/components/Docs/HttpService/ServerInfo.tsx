@@ -117,7 +117,7 @@ const ServerUrl: React.FC<IServer & { hasAnyServerVariables: boolean; defaultIsO
       {variablesSchema && (
         <Panel.Content w="full">
           <Box pl={4}>
-            <JsonSchemaViewer schema={variablesSchema} />
+            <JsonSchemaViewer schema={variablesSchema} defaultExpandedDepth={0} />
           </Box>
         </Panel.Content>
       )}

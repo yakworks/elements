@@ -218,6 +218,7 @@ const Response = ({ response, onMediaTypeChange }: ResponseProps) => {
               renderRootTreeLines
               nodeHasChanged={nodeHasChanged}
               renderExtensionAddon={renderExtensionAddon}
+              defaultExpandedDepth={0}
             />
           )}
         </>

@@ -58,6 +58,7 @@ const SchemaAndDescription = ({ title: titleProp, schema }: ISchemaAndDescriptio
         maxRefDepth={maxRefDepth}
         schema={getOriginalObject(schema)}
         renderExtensionAddon={renderExtensionAddon}
+        defaultExpandedDepth={0}
       />
     </Box>
   );
