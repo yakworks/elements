@@ -267,7 +267,7 @@ export const addTagGroupsToTree = <T extends GroupableNode>(
       tree.push({
         id: node.uri,
         slug: node.uri,
-        title: node.name,
+        title: node.uri.replace('/schemas/', ''),
         type: node.type,
         meta: isHttpOperation(node.data) || isHttpWebhookOperation(node.data) ? node.data.method : '',
       });
