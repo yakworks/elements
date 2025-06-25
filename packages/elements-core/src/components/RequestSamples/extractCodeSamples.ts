@@ -34,11 +34,17 @@ export const extractCodeSamples = (obj: unknown): CodeSample[] => {
   }
   return codeSamples.reduce((extracted, item) => {
     if (isPlainObject(item) && isString(item['lang']) && isString(item['source'])) {
-      //TODO: fix this
-      const lib = 'cUrl'; //isString(item['lib']) ? item['lib'] : undefined;
-      const label = 'cUrl'; //isString(item['label']) ? item['label'] : lib ?? item['lang'];
+      const lib = isString(item['lib']) ? item['lib'] : undefined;
+      const label = isString(item['label']) ? item['label'] : lib ?? item['lang'];
+      
+      // Normalize language values to match the default configuration
+      let normalizedLang = item['lang'];
+      if (normalizedLang === 'bash') {
+        normalizedLang = 'shell';
+      }
+      
       extracted.push({
-        lang: 'shell',
+        lang: normalizedLang,
         lib,
         label,
         source: item['source'], // TODO: does not support $ref objects

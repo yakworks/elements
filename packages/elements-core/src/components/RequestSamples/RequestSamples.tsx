@@ -60,6 +60,30 @@ export const RequestSamples = memo<RequestSamplesProps>(({ request, embeddedInMd
   const [selectedLanguage, setSelectedLanguage] = useAtom(selectedLanguageAtom);
   const [selectedLibrary, setSelectedLibrary] = useAtom(selectedLibraryAtom);
 
+  // Set default language to first custom sample if available
+  useEffect(() => {
+    if (customCodeSamples.length > 0) {
+      const firstCustomSample = customCodeSamples[0];
+      // Only change if we're still on the default or if the current selection doesn't match any custom sample
+      const hasMatchingCustomSample = customCodeSamples.some(
+        sample => sample.lang === selectedLanguage && (!sample.lib || sample.lib === selectedLibrary),
+      );
+
+      if (!hasMatchingCustomSample) {
+        setSelectedLanguage(firstCustomSample.lang);
+        if (firstCustomSample.lib) {
+          setSelectedLibrary(firstCustomSample.lib);
+        } else {
+          setSelectedLibrary('');
+        }
+      }
+    } else if (selectedLanguage !== DEFAULT_LANGUAGE) {
+      // If no custom samples, reset to default
+      setSelectedLanguage(DEFAULT_LANGUAGE);
+      setSelectedLibrary(DEFAULT_LIBRARY);
+    }
+  }, [customCodeSamples, selectedLanguage, selectedLibrary, setSelectedLanguage, setSelectedLibrary]);
+
   // combines the predefined samples with the custom ones
   const allRequestSamples = useMemo(() => {
     const requestSamples = cloneDeep(requestSampleConfigs as Dictionary<LanguageConfigWithCode, SupportedLanguage>);
@@ -79,7 +103,7 @@ export const RequestSamples = memo<RequestSamplesProps>(({ request, embeddedInMd
 
       if (!existingLanguageSample) {
         const newLanguageSample: LanguageConfigWithCode = {
-          displayText: customCodeSample.lang,
+          displayText: customCodeSample.label,
           mosaicCodeViewerLanguage: customCodeSample.lang as any, // TODO: no type guards to prevent this
           httpSnippetLanguage: customCodeSample.lang,
           libraries: {},
@@ -87,7 +111,7 @@ export const RequestSamples = memo<RequestSamplesProps>(({ request, embeddedInMd
 
         if (customCodeSample.lib) {
           newLanguageSample.libraries[customCodeSample.lib] = {
-            displayText: `${customCodeSample.lang} / ${customCodeSample.lib}`,
+            displayText: `${customCodeSample.label} / ${customCodeSample.lib}`,
             httpSnippetLibrary: customCodeSample.lib,
             sampleCode: customCodeSample.source,
           };
@@ -107,18 +131,19 @@ export const RequestSamples = memo<RequestSamplesProps>(({ request, embeddedInMd
 
           if (!existingLibrarySample) {
             const newLibrarySample: LibraryConfigWithCode = {
-              displayText: `${existingLanguageSample} / ${customCodeSample.lib}`,
+              displayText: `${customCodeSample.label} / ${customCodeSample.lib}`,
               httpSnippetLibrary: customCodeSample.lib,
               sampleCode: customCodeSample.source,
             };
 
             existingLanguageSample.libraries[customCodeSample.lib] = newLibrarySample;
           } else {
-            existingLibrarySample.displayText = `${existingLanguageSampleKey} / ${existingLibrarySampleKey}`;
+            existingLibrarySample.displayText = `${customCodeSample.label} / ${customCodeSample.lib}`;
             existingLibrarySample.sampleCode = customCodeSample.source;
           }
         } else {
           existingLanguageSample.sampleCode = customCodeSample.source;
+          existingLanguageSample.displayText = customCodeSample.label;
         }
       }
     }
@@ -166,9 +191,7 @@ export const RequestSamples = memo<RequestSamplesProps>(({ request, embeddedInMd
       {
         ...selectedLibrarySample,
         ...selectedLanguageSample,
-        //TODO: fix this
-        displayText: 'shell',
-        //selectedLibrarySample?.displayText ?? selectedLanguageSample?.displayText,
+        displayText: selectedLibrarySample?.displayText ?? selectedLanguageSample?.displayText,
       },
     ];
   }, [allRequestSamples, selectedLanguage, selectedLibrary, setSelectedLanguage, setSelectedLibrary]);
