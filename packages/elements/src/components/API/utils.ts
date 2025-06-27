@@ -10,6 +10,7 @@ import { INodeTag } from '@stoplight/types';
 import { JSONSchema7 } from 'json-schema';
 
 import { OperationNode, SchemaNode, ServiceChildNode, ServiceNode, WebhookNode } from '../../utils/oas/types';
+import { capitalize } from 'lodash';
 
 type GroupableNode = OperationNode | WebhookNode | SchemaNode;
 
@@ -297,7 +298,7 @@ export const addTagGroupsToTree = <T extends GroupableNode>(
         const tagSummaryItem = {
           id: `/tag-summary/${group.title.toLowerCase()}`,
           slug: `/tag-summary/${group.title.toLowerCase()}`,
-          title: `${group.title} - Summary`,
+          title: capitalize(`${group.title}`),
           type: 'article' as const,
           meta: 'Summary',
         };

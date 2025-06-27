@@ -1,4 +1,12 @@
-import { faBullseye, faCloud, faCube, faCubes, faEnvelope, faEnvelopesBulk } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBullseye,
+  faCloud,
+  faCube,
+  faCubes,
+  faEnvelope,
+  faEnvelopesBulk,
+  faInfoCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import { IIconProps, ITextColorProps } from '@stoplight/mosaic';
 import { HttpMethod } from '@stoplight/types';
 
@@ -8,6 +16,7 @@ export const NODE_TYPE_TITLE_ICON: Readonly<{ [nodeType: string]: IIconProps['ic
   http_operation: faBullseye,
   http_webhook: faEnvelope,
   model: faCube,
+  article: faInfoCircle,
 };
 
 export const NODE_GROUP_ICON: Readonly<{ [itemType: string]: IIconProps['icon'] }> = {
@@ -26,6 +35,7 @@ export const NODE_TYPE_ICON_COLOR: Readonly<{ [nodeType: string]: ITextColorProp
   http_service: '#D812EA' as ITextColorProps['color'],
   http_operation: '#9747FF' as ITextColorProps['color'],
   http_webhook: 'primary',
+  article: '#9747ff' as ITextColorProps['color'],
 };
 
 export const NODE_GROUP_ICON_COLOR: Readonly<{ [nodeType: string]: ITextColorProps['color'] }> = {
